@@ -21,7 +21,11 @@
             	<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             	</HBox.margin>
             </TextField>
-            <Label text="\%" />
+            <Label text="\%">
+            	<HBox.margin>
+            		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            	</HBox.margin>
+            </Label>>
             <Label text="This should cause a merge conflict"/>
          </children>
       </HBox>
