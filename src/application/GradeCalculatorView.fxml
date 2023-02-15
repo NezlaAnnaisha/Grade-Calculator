@@ -8,33 +8,48 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.collections.FXCollections?>
 
-<VBox alignment="CENTER" prefHeight="314.0" prefWidth="411.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GradeCalculatorController">
+<VBox alignment="CENTER" prefHeight="360.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GradeCalculatorController">
    <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Label text="Project Grade:">
-               <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" top="10.0" />
-               </HBox.margin></Label>
-            <TextField fx:id="projectGradeTextfield">
-            	<HBox.margin>
-            	<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            	</HBox.margin>
-            </TextField>
-            <Label text="\%" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" text="Project Grade:">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="projectGradeTextfield" alignment="CENTER">
+                  	<HBox.margin>
+                  	<Insets left="10.0" right="10.0" />
+                  	</HBox.margin>
+                  </TextField>
+                  <Label alignment="CENTER" text="\%">
+                  	<HBox.margin>
+                  		<Insets right="10.0" />
+                  	</HBox.margin>
+                  </Label> 
+               </children>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
+            </HBox>
+            <Label fx:id="projectErrorLabel" alignment="CENTER" contentDisplay="CENTER" text="" textFill="RED">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin></Label>
          </children>
-      </HBox>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+      </VBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label text="Required Coding Challenges Passed:">
+            <Label text="Required Coding Challenges:">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" top="10.0" />
-               </HBox.margin></Label>
-               <Label fx:id="projectErrorLabel" text="Error message goes here" textFill="RED">
-               		<HBox.margin>
-               			<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               		</HBox.margin>            		
-               </Label>
+               </HBox.margin>
+            </Label>
             <ChoiceBox fx:id="requiredCodingChallengesChoiceBox" prefWidth="150.0">
             	<items>
             	  <FXCollections fx:factory="observableArrayList">
@@ -61,10 +76,13 @@
                </HBox.margin>
             </ChoiceBox>
          </children>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label text="Optional Coding Challenges Passed:">
+            <Label text="Optional Coding Challenges:">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </HBox.margin></Label>
@@ -84,6 +102,9 @@
                </HBox.margin>
             </ChoiceBox>
          </children>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -96,15 +117,29 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin></Slider>
          </children>
-      </HBox>
-      <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#calculateGrade" text="Calculate Grade">
          <VBox.margin>
-            <Insets top="20.0" />
-         </VBox.margin></Button>
-      <Label fx:id="courseGradeLabel" text="">
-         <VBox.margin>
-            <Insets bottom="25.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="20.0" />
          </VBox.margin>
-      </Label>
+      </HBox>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#calculateGrade" text="Calculate Grade" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <Label fx:id="courseGradeLabel" text="">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets bottom="20.0" top="20.0" />
+         </VBox.margin>
+      </VBox>
    </children>
 </VBox>
