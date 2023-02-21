@@ -31,12 +31,41 @@ public class CCStringsIfAndWhile {
 			}		
 		}
 		
-		
 		return totalCount;
 	}
 
 	public static int smallestDigit(int num) {		
-		return 0;			
+		
+		// Assume and set smallest digit possible as 9
+		int smallestDigit = 9;
+				
+		// Checks if num is a zero digit
+		if (num == 0) {
+			smallestDigit = num;
+		}
+				
+		// Checks if num is negative, and convert to positive
+		if (num < 0) {
+			num = -num;
+		}
+				
+		// Checks for smallest digit in num
+		while (num > 0) {
+					
+			// Remainder gets the right most digit from num
+			// Assume remainder digit is largest
+			int largestDigit = num % 10;
+					
+			if (smallestDigit > largestDigit) {
+				smallestDigit = largestDigit;
+			}
+					
+			// Division removes the right most digit from num	
+			num = num / 10;		
+				
+		}
+		
+		return smallestDigit;			
 	}
 	
 	
