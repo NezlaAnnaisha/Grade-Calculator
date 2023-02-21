@@ -1,13 +1,22 @@
 package application;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class GradeCalculatorController {
+	Stage applicationStage;
 
     @FXML
     private ChoiceBox<Integer> requiredCodingChallengesChoiceBox;
@@ -16,10 +25,19 @@ public class GradeCalculatorController {
     private ChoiceBox<Integer> optionalCodingChallengesChoiceBox;
 
     @FXML
-    private Slider quizSlider;
+    private ChoiceBox<Integer> requiredQuizzesChoiceBox;
+    
+    @FXML
+    private ChoiceBox<Integer> optionalQuizzesChoiceBox;
 
     @FXML
     private TextField projectGradeTextfield;
+    
+    @FXML
+    private Label requiredQuizLabel;
+    
+    @FXML
+    private Label optionalQuizLabel;
     
     @FXML
     private Label courseGradeLabel;
@@ -84,7 +102,154 @@ public class GradeCalculatorController {
     	
     	return projectGrade;
     }
-
+    
+    // Loop for the required quiz grades
+    double requiredAverageQuizGrade = 0.0;
+    void calculateRequiredAverageQuizGrade (Scene mainScene, ArrayList<TextField> quizGradeTextfields) {
+    	applicationStage.setScene(mainScene);
+    	
+    	// Make sure to reset to zero, in case it contains a previously computed value
+    	requiredAverageQuizGrade = 0.0;
+    	for (TextField quizGradeTextfield : quizGradeTextfields) {
+    		requiredAverageQuizGrade += Double.parseDouble(quizGradeTextfield.getText());
+    	}
+    	requiredAverageQuizGrade = requiredAverageQuizGrade / quizGradeTextfields.size();
+    	
+    	// Label to show user their inputed average
+    	requiredQuizLabel.setText(String.format("(Current required quiz average is %.1f out of 10.)", requiredAverageQuizGrade));
+    	
+    }
+    
+    // Loop for the optional quiz grades
+    double optionalAverageQuizGrade = 0.0;
+    void calculateOptionalAverageQuizGrade(Scene mainScene, ArrayList<TextField> quizGradeTextfields) {
+    	
+    	//Make sure to reset to zero, in case it contains a previously computed value
+    	optionalAverageQuizGrade = 0.0;
+    	
+    	// List to compare optional grades if user has more than 5 inputs
+    	ArrayList<Double> optionalQuizGradesList = new ArrayList<Double>();
+    	
+    	// Convert & add each grade to list
+    	for (TextField quizGradeTextfield : quizGradeTextfields) {
+    		optionalAverageQuizGrade = Double.parseDouble(quizGradeTextfield.getText());
+    		optionalQuizGradesList.add(optionalAverageQuizGrade);
+    	}
+    	
+    	// Sort grades in array from smallest to largest
+    	Collections.sort(optionalQuizGradesList);
+    	
+    	// Remove lowest grades to ensure only 5 inputs are counted
+    	if (optionalQuizGradesList.size() == 6) {
+    		optionalQuizGradesList.remove(0);
+    	} else if (optionalQuizGradesList.size() == 7) {
+    		optionalQuizGradesList.remove(0);
+    		optionalQuizGradesList.remove(0);
+    	}
+    	
+    	for (Double optionalQuizGrade : optionalQuizGradesList) {
+    		optionalAverageQuizGrade += optionalQuizGrade;
+    	}
+    	optionalAverageQuizGrade = optionalAverageQuizGrade / optionalQuizGradesList.size();
+    	
+    	// Label to show user their inputed average
+    	optionalQuizLabel.setText(String.format("(Current optional quiz everage is %.1f out of 10.)", optionalAverageQuizGrade));
+    	
+    	
+    }
+    
+    @FXML
+    void getRequiredQuizGrades(ActionEvent enterRequiredQuizGradeEvent) {
+    	Scene mainScene = applicationStage.getScene();
+    	
+    	int numberOfRequiredQuizzes = requiredQuizzesChoiceBox.getValue();
+    	int rowsCreated = 0;
+    	VBox quizGradeContainer = new VBox();
+    	quizGradeContainer.setPadding(new Insets(10,10,10,10));
+    	
+    	Label requiredQuizTitle = new Label("Enter your required quiz grades.");
+    	requiredQuizTitle.setPadding(new Insets(10,10,10,10));
+    	quizGradeContainer.getChildren().add(requiredQuizTitle);
+    	
+    	// Create a list that we'll put all the text-field with quiz grades
+    	ArrayList<TextField> quizGradeTextfields = new ArrayList<TextField>();
+    	while (rowsCreated < numberOfRequiredQuizzes) {		
+    		HBox rowContainer = new HBox();
+        	Label quizGradeLabel = new Label("Quiz grade: ");
+        	TextField quizGradeTextfield = new TextField();
+        	quizGradeTextfields.add(quizGradeTextfield);
+        	rowContainer.setPadding(new Insets(5,5,5,5));
+        	
+        	rowContainer.getChildren().addAll(quizGradeLabel, quizGradeTextfield);
+        	rowsCreated++;
+        	
+        	quizGradeContainer.getChildren().add(rowContainer);
+        	
+    	}
+    	
+    	// Labels and paddings for grades
+    	Label userInput = new Label("(Grade input must be out of 10!)");
+    	userInput.setPadding(new Insets(10,10,10,10));
+    	quizGradeContainer.getChildren().add(userInput);
+    	
+    	HBox buttonContainer = new HBox();
+    	Button doneButton = new Button("Done");
+    	buttonContainer.setPadding(new Insets(10,10,10,10));
+    	buttonContainer.getChildren().add(doneButton);
+    	
+    	doneButton.setOnAction(doneEvent -> calculateRequiredAverageQuizGrade(mainScene, quizGradeTextfields));
+    	quizGradeContainer.getChildren().add(buttonContainer);
+    	
+    	Scene quizGradesScene = new Scene(quizGradeContainer);
+    	applicationStage.setScene(quizGradesScene);
+    }
+    
+    @FXML
+    void getOptionalQuizGrades(ActionEvent enterOptionalQuizGradeEvent) {
+    	Scene mainScene = applicationStage.getScene();
+    	
+    	int numberOfOptionalQuizzes = optionalQuizzesChoiceBox.getValue();
+    	int rowsCreated = 0;
+    	VBox quizGradeContainer = new VBox();
+    	quizGradeContainer.setPadding(new Insets(10,10,10,10));
+    	
+    	Label optionalQuizTitle = new Label("Enter your optional quiz grades.");
+    	optionalQuizTitle.setPadding(new Insets(10,10,10,10));
+    	quizGradeContainer.getChildren().add(optionalQuizTitle);
+    	
+    	// Create a list that we'll put all the text-field with quiz grades
+    	ArrayList<TextField> quizGradeTextfields = new ArrayList<TextField>();
+    	
+    	while (rowsCreated < numberOfOptionalQuizzes) {		
+    		HBox rowContainer = new HBox();
+        	Label quizGradeLabel = new Label("Quiz grade: ");
+        	TextField quizGradeTextfield = new TextField();
+        	quizGradeTextfields.add(quizGradeTextfield);
+        	rowContainer.setPadding(new Insets(5, 5, 5, 5));
+        	
+        	rowContainer.getChildren().addAll(quizGradeLabel, quizGradeTextfield);
+        	rowsCreated++;
+        	
+        	quizGradeContainer.getChildren().add(rowContainer);
+        	
+    	}
+    	
+    	Label userInput = new Label("(Grade input must be out of 10!)");
+    	userInput.setPadding(new Insets(10, 10, 10, 10));
+    	quizGradeContainer.getChildren().add(userInput);
+    	
+    	HBox buttonContainer = new HBox();
+    	Button doneButton = new Button("Done"); 
+    	buttonContainer.setPadding(new Insets(10, 10, 10, 10));
+    	buttonContainer.getChildren().add(doneButton);
+    
+    	doneButton.setOnAction(doneEvent -> calculateOptionalAverageQuizGrade(mainScene, quizGradeTextfields));
+    	quizGradeContainer.getChildren().add(buttonContainer);
+    	
+    	Scene quizGradesScene = new Scene(quizGradeContainer);
+    	applicationStage.setScene(quizGradesScene);
+    }
+    
     @FXML
     void calculateGrade(ActionEvent event) {
     	
@@ -116,10 +281,15 @@ public class GradeCalculatorController {
     	System.out.println("Project grade: " + projectGrade + ", Course grade so far: " + courseGrade);
     	
     	// Assuming quizzes are worth 25% towards course grade (optional & required total)
-    	double quizGrade = quizSlider.getValue();
-    	courseGrade = courseGrade + (quizGrade * 100/10) * 0.25;
-    	System.out.println("Quiz grade: " + quizGrade + ", Course grade so far: " + courseGrade);
+    	// Assuming quizzes are marked out of 20 total; 15 required, 5 optional
+    	courseGrade += (requiredAverageQuizGrade * 100/20) * 0.25;
+    	System.out.println("Required quiz grade: " + requiredAverageQuizGrade + ", Course grade so far: " + courseGrade);
     	
+    	courseGrade += (optionalAverageQuizGrade * 100/20) * 0.25;
+    	System.out.println("Optional quiz grade: " + optionalAverageQuizGrade + ", Course grade so far: " + courseGrade);
+    	
+    	// Assuming coding challenges are worth 25% towards course grade (optional & required total)
+    	// Assuming challenges are marked out of 20 total; 15 required, 5 optional
     	int requiredCodingChallenges = requiredCodingChallengesChoiceBox.getValue();
     	courseGrade = courseGrade + (requiredCodingChallenges * 100/20) * 0.25;
     	System.out.println("Required coding challenges passed: " + requiredCodingChallenges + ", Course grade so far: " + courseGrade);
