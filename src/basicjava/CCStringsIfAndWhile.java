@@ -3,7 +3,13 @@ package basicjava;
 public class CCStringsIfAndWhile {
 
 	public static boolean isDigit(char aChar) {
-		return false;
+		
+		// Checks if character is a digit between 0-9
+		if (aChar >= '0' && aChar <= '9') {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public static int count(String str, String chars) {	
