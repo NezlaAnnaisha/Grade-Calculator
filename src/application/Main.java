@@ -19,7 +19,7 @@ public class Main extends Application {
 			GradeCalculatorController controller = (GradeCalculatorController)loader.getController();
 			controller.applicationStage = primaryStage;
 			
-			Scene scene = new Scene(root,420,400);
+			Scene scene = new Scene(root,440,450);
 			
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Nezla's Grade Calculator");

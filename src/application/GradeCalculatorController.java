@@ -113,10 +113,10 @@ public class GradeCalculatorController {
     	for (TextField quizGradeTextfield : quizGradeTextfields) {
     		requiredAverageQuizGrade += Double.parseDouble(quizGradeTextfield.getText());
     	}
-    	requiredAverageQuizGrade = requiredAverageQuizGrade / quizGradeTextfields.size();
+    	requiredAverageQuizGrade = requiredAverageQuizGrade / 15;
     	
     	// Label to show user their inputed average
-    	requiredQuizLabel.setText(String.format("(Current required quiz average is %.1f out of 10.)", requiredAverageQuizGrade));
+    	requiredQuizLabel.setText(String.format("(Current required quiz average is %.2f out of 10.)", requiredAverageQuizGrade));
     	
     }
     
@@ -150,10 +150,10 @@ public class GradeCalculatorController {
     	for (Double optionalQuizGrade : optionalQuizGradesList) {
     		optionalAverageQuizGrade += optionalQuizGrade;
     	}
-    	optionalAverageQuizGrade = optionalAverageQuizGrade / optionalQuizGradesList.size();
+    	optionalAverageQuizGrade = optionalAverageQuizGrade / 5;
     	
     	// Label to show user their inputed average
-    	optionalQuizLabel.setText(String.format("(Current optional quiz everage is %.1f out of 10.)", optionalAverageQuizGrade));
+    	optionalQuizLabel.setText(String.format("(Current optional quiz everage is %.2f out of 10.)", optionalAverageQuizGrade));
     	
     	
     }
