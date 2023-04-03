@@ -280,12 +280,13 @@ public class GradeCalculatorController {
     	
     	// Assuming that project is worth 50% towards course grade
     	String projectValueEntered = projectGradeTextfield.getText();    	
+    
+    	Grade myProjectGrade = new Grade();
+    	projectErrorLabel.setText(myProjectGrade.setValue(projectValueEntered));
     	
-    	double projectGrade = getProjectGrade(projectValueEntered);
+    	courseGrade = courseGrade + myProjectGrade.value * 50 / 100;    		
     	
-    	courseGrade = courseGrade + projectGrade * 50 / 100;    		
-    	
-    	System.out.println("Project grade: " + projectGrade + ", Course grade so far: " + courseGrade);
+    	System.out.println("Project grade: " + myProjectGrade.value + ", Course grade so far: " + courseGrade);
     	
     	// Assuming that quizzes are worth 25% towards course grade (optional & required)
     	// Assuming quizzes are marked out of 20 total; 15 required, 7 optional
