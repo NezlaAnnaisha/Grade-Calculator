@@ -5,6 +5,16 @@ public class Grade {
 	int maxValue = 100;
 	double weight;
 	
+	Grade(double gradeValue, int maxPossibleValue, double weightTowardsCourseGrade){
+		value = gradeValue;
+		maxValue = maxPossibleValue;
+		weight = weightTowardsCourseGrade;
+	}
+	
+	double getWeightedPercentageGrade() {
+		return value * 100 * weight / maxValue;
+	}
+	
 	String setValue(String valueAsString) {	
 		String errorMessage = "";
 		// Check that the string entered by the user is a valid decimal number
@@ -14,7 +24,7 @@ public class Grade {
     		// Check if the character is a digit
     		if (!Character.isDigit(c)) {		   			
     			validProjectGrade = false;
-    			errorMessage = String.format("Do not use characters! Please enter a number.", c); 
+    			errorMessage = "Do not use characters! Please enter a number."; 
     			
     			// Check if the character is a negative symbol
     			if (!Character.isDigit(c) && c == '-') {
@@ -24,13 +34,13 @@ public class Grade {
     			// Check if the character is a decimal point   			
     			if (!Character.isDigit(c) && c == '.') {
     					validProjectGrade = true;
-    					errorMessage = String.format("", c);
+    					errorMessage = "";
     					decimalCount++;
     			
     			// Check if more than 1 decimal point exists in user input
     			if (decimalCount > 1) {
     				validProjectGrade = false;
-    				errorMessage = String.format("Make sure to only enter 1 decimal point!", c);
+    				errorMessage = "Make sure to only enter 1 decimal point!";
     			}
 
     			}
@@ -50,7 +60,7 @@ public class Grade {
     	// Check if the number entered by the user is a valid percentage grade
     	// If valid, include it in the grade computation
     	if (value < 0 || value > maxValue) {
-    		errorMessage = String.format("Project grade should be between 0% and 100%.", maxValue);
+    		errorMessage = "Project grade should be between 0% and 100%.";
     		value = 0;
     	}
     	

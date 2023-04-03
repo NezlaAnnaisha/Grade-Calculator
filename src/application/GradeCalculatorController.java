@@ -42,74 +42,14 @@ public class GradeCalculatorController {
     private Label optionalQuizLabel;
     
     @FXML
-    private Label projectErrorLabel;
-    
-    /**
-     * Convert the value entered to a double value. This method will verify that the value
-     * entered is indeed a number and is a valid percentage grade (between 0 and 100). If the
-     * value entered is not a valid percentage grade, this method will return 0.0 as the project
-     * grade instead.
-     * 
-     * @param valueEntered a String that holds a value entered by the user intended to be a project grade
-     * @return the project value entered by the user if it is a valid percentage grade and 0 otherwise
-     */
-    double getProjectGrade(String valueEntered) {
-    	// Check that the string entered by the user is a valid decimal number
-    	boolean validProjectGrade = true;
-    	int decimalCount = 0;
-    	for (char c : valueEntered.toCharArray()) {
-    		// Check if the character is a digit
-    		if (!Character.isDigit(c)) {		   			
-    			validProjectGrade = false;
-    			projectErrorLabel.setText("Do not use characters! Please enter a number."); 
-    			
-    			// Check if the character is a negative symbol
-    			if (!Character.isDigit(c) && c == '-') {
-    				validProjectGrade = true;
-    			}
-    			
-    			// Check if the character is a decimal point   			
-    			if (!Character.isDigit(c) && c == '.') {
-    					validProjectGrade = true;
-    					projectErrorLabel.setText("");
-    					decimalCount++;
-    			
-    			// Check if more than 1 decimal point exists in user input
-    			if (decimalCount > 1) {
-    				validProjectGrade = false;
-    				projectErrorLabel.setText("Make sure to only enter 1 decimal point!");
-    			}
-
-    			}
-    			
-    		}    			
-    		    		
-    	}  
-    	
-    	
-    	// Convert the string entered by the user to a double if the input is a valid number
-    	// Otherwise the project grade will default to zero
-    	double projectGrade = 0;
-    	if (validProjectGrade) {
-    		projectGrade = Double.parseDouble(valueEntered);
-    	}
-    	
-    	// Check if the number entered by the user is a valid percentage grade
-    	// If valid, include it in the grade computation
-    	if (projectGrade < 0 || projectGrade > 100) {
-    		projectErrorLabel.setText("Project grade should be between 0% and 100%.");
-    		projectGrade = 0;
-    	}
-    	
-    	return projectGrade;
-    }
-    
+    private Label projectErrorLabel;   
     
     // Loop for required quiz grades
     double requiredAverageQuizGrade = 0.0;
     
     void calculateRequiredAverageQuizGrade(Scene mainScene, ArrayList<TextField> quizGradeTextfields) {
     	applicationStage.setScene(mainScene);
+    	
     	
     	// Make sure to reset to zero, in case it contains a previously computed value
     	requiredAverageQuizGrade = 0.0;
@@ -276,37 +216,23 @@ public class GradeCalculatorController {
     	// Clear all error messages
     	projectErrorLabel.setText("");
     	
-    	double courseGrade = 0.0;
-    	
-    	// Assuming that project is worth 50% towards course grade
-    	String projectValueEntered = projectGradeTextfield.getText();    	
-    
-    	Grade myProjectGrade = new Grade();
-    	projectErrorLabel.setText(myProjectGrade.setValue(projectValueEntered));
-    	
-    	courseGrade = courseGrade + myProjectGrade.value * 50 / 100;    		
-    	
-    	System.out.println("Project grade: " + myProjectGrade.value + ", Course grade so far: " + courseGrade);
-    	
-    	// Assuming that quizzes are worth 25% towards course grade (optional & required)
-    	// Assuming quizzes are marked out of 20 total; 15 required, 7 optional
-    	courseGrade += (requiredAverageQuizGrade * 100 / 20 ) * 0.25;
-    	System.out.println("Required quiz grade: " + requiredAverageQuizGrade + ", Course grade so far: " + courseGrade);
-    	
-    	courseGrade += (optionalAverageQuizGrade * 100 / 20 ) * 0.25;
-    	System.out.println("Optional quiz grade: " + optionalAverageQuizGrade + ", Course grade so far: " + courseGrade);
     	
     	
-    	// Assuming that coding challenges are worth 25% towards course grade (optional & required total)
-    	// Assuming challenges are marked out of 20 total; 15 required, 5 optional
-    	int requiredCodingChallengesPassed = requiredCodingChallengesChoiceBox.getValue();
-    	courseGrade = courseGrade + (requiredCodingChallengesPassed * 100 / 20) * 0.25;
-    	System.out.println("Required coding challenges passed: " + requiredCodingChallengesPassed + ", Course grade so far: " + courseGrade);
+    	Grade projectGrade = new Grade(0, 100, 0.5);
+    	projectErrorLabel.setText(projectGrade.setValue(projectGradeTextfield.getText()));
     	
-    	int optionalCodingChallengesPassed = optionalCodingChallengesChoiceBox.getValue();
-    	courseGrade = courseGrade + (optionalCodingChallengesPassed * 100 / 20) * 0.25;
-    	System.out.println("Optional coding challenges passed: " + optionalCodingChallengesPassed + ", Course grade so far: " + courseGrade);
+    	Grade requiredQuizGrade = new Grade(requiredAverageQuizGrade, 20, .25);	
+    	Grade optionalQuizGrade = new Grade(optionalAverageQuizGrade, 20, .25);
     	
+    	Grade requiredCodingChallengeGrade = new Grade(requiredCodingChallengesChoiceBox.getValue(), 20, .25);
+    	Grade optionalCodingChallengeGrade = new Grade(optionalCodingChallengesChoiceBox.getValue(), 20, .25);
+    	
+    	double courseGrade = projectGrade.getWeightedPercentageGrade()+requiredQuizGrade.getWeightedPercentageGrade()+
+    			optionalQuizGrade.getWeightedPercentageGrade()+requiredCodingChallengeGrade.getWeightedPercentageGrade()+
+    			optionalCodingChallengeGrade.getWeightedPercentageGrade();
+    	
+    	//Display result of calculation to the user in the window
+    	//Display result to two digits after decimal point
     	courseGradeLabel.setText(String.format("Your course grade is %.2f",courseGrade));
     	
 
