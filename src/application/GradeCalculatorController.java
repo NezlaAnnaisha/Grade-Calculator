@@ -42,62 +42,88 @@ public class GradeCalculatorController {
     private Label optionalQuizLabel;
     
     @FXML
-    private Label projectErrorLabel;   
+    private Label projectErrorLabel;  
+    
+    Label quizErrorLabel = new Label();
     
     // Loop for required quiz grades
-    double requiredAverageQuizGrade = 0.0;
-    
+    double requiredAverageQuizGrade = 0.0;   
     void calculateRequiredAverageQuizGrade(Scene mainScene, ArrayList<TextField> quizGradeTextfields) {
-    	applicationStage.setScene(mainScene);
+    	quizErrorLabel.setText("");
     	
+    	// Assume that each quiz has equal weight (divide out of 10, not 100 percentage)
+    	double weightPerQuiz = (1.0 / 15) / 10;
     	
     	// Make sure to reset to zero, in case it contains a previously computed value
     	requiredAverageQuizGrade = 0.0;
+    	boolean errorInQuizGrade = false;
     	
     	for(TextField quizGradeTextfield : quizGradeTextfields) {
-    		requiredAverageQuizGrade += Double.parseDouble(quizGradeTextfield.getText());
+    		Grade quizGrade = new Grade(0, 10, weightPerQuiz);
+    		String errorMessage = quizGrade.setValue(quizGradeTextfield.getText());
+    		if (!errorMessage.equals("")) {
+    			errorInQuizGrade = true;
+    			quizErrorLabel.setText(errorMessage);
+    		}
+    		requiredAverageQuizGrade += quizGrade.getWeightedPercentageGrade();	
     	}
-    	requiredAverageQuizGrade = requiredAverageQuizGrade / 15;
+    	
+    	if(!errorInQuizGrade) {
+    		applicationStage.setScene(mainScene);
+    	}    	
+    	
     	// Label to show user inputed average
         requiredQuizLabel.setText(String.format("(Current required quiz average is %.2f out of 10)",requiredAverageQuizGrade));
+    
     }
     
     
     // Loop for optional quiz grades
-    double optionalAverageQuizGrade = 0.0;
-    
+    double optionalAverageQuizGrade = 0.0;    
     void calculateOptionalAverageQuizGrade(Scene mainScene, ArrayList<TextField> quizGradeTextfields) {
-    	applicationStage.setScene(mainScene);
+    	quizErrorLabel.setText("");
+    	
+    	//Assume that each quiz has equal weight (divide out of 10, not 100 percentage)
+    	double weightPerQuiz = (1.0 / 5) / 10;
     	
     	// Make sure to reset to zero, in case it contains a previously computed value
     	optionalAverageQuizGrade = 0.0;
+    	boolean errorInQuizGrade = false;
     	
     	// Array list to compare grades if user has more than 5 inputs
-    	ArrayList<Double> gradesList = new ArrayList<Double>();  	
+    	ArrayList<Double> gradesList = new ArrayList<Double>();  
     	
     	// Convert & add each grade to list
-    	for(TextField quizGradeTextfield : quizGradeTextfields) {    		
-    		double doubleQuizGrade = Double.parseDouble(quizGradeTextfield.getText());     		
-    		gradesList.add(doubleQuizGrade);
-    	}	
-        
-    	// Sort grades in array smallest to largest
-        Collections.sort(gradesList);
+    	for(TextField quizGradeTextfield : quizGradeTextfields) { 
+    		Grade quizGrade = new Grade(0, 10, weightPerQuiz);
+    		String errorMessage = quizGrade.setValue(quizGradeTextfield.getText());   		   		
+        	if(!errorMessage.equals("")) {      		
+        		errorInQuizGrade = true;
+        		quizErrorLabel.setText(errorMessage);
+        	}       	
+	        //double doubleQuizGrade = Double.parseDouble(quizGradeTextfield.getText());
+	        gradesList.add(quizGrade.getWeightedPercentageGrade());    	
+    	}
+	        	
+		// Sort grades in array smallest to largest   	  
+    	Collections.sort(gradesList);
+			        	
+		// Remove lowest grades if user inputs more than 5 grades
+		if (gradesList.size() == 6) {
+			gradesList.remove(0);
+		} else if (gradesList.size() == 7) {
+			gradesList.remove(0);
+			gradesList.remove(0);
+		} 		
+		
+		for (double doubleQuizGrade : gradesList) {
+			optionalAverageQuizGrade += doubleQuizGrade;
+		}
         	
-        // Remove lowest grades if user inputs more than 5 grades
-        if (gradesList.size() == 6) {
-        	gradesList.remove(0);
-        } else if (gradesList.size() == 7) {
-        	gradesList.remove(0);
-        	gradesList.remove(0);
-        }       		
-        	
-        
-        for (Double gradeList : gradesList) {       		
-        	optionalAverageQuizGrade += gradeList;        		
-        	}  
+        if (!errorInQuizGrade) {
+        	applicationStage.setScene(mainScene);
+        }
     	
-    	optionalAverageQuizGrade = optionalAverageQuizGrade / 5;
     	// Label to show user inputed average
     	optionalQuizLabel.setText(String.format("(Current required quiz average is %.2f out of 10)",optionalAverageQuizGrade));
     }
@@ -111,8 +137,10 @@ public class GradeCalculatorController {
     	VBox quizGradeContainer = new VBox();
     	quizGradeContainer.setPadding(new Insets(10, 10, 10, 10));
     	
+    	quizGradeContainer.getChildren().add(quizErrorLabel);
+    	
     	Label requiredQuizTitle = new Label("Enter your required quiz grades.");
-    	requiredQuizTitle.setPadding(new Insets(10, 10, 10, 10));
+    	requiredQuizTitle.setPadding(new Insets(10, 10, 10, 10));    	
     	quizGradeContainer.getChildren().add(requiredQuizTitle);
     	
     	// Create a list that we'll put all the textFields with quiz grades
@@ -157,6 +185,8 @@ public class GradeCalculatorController {
     	int rowsCreated = 0;
     	VBox quizGradeContainer = new VBox();
     	quizGradeContainer.setPadding(new Insets(10, 10, 10, 10));
+    	
+    	quizGradeContainer.getChildren().add(quizErrorLabel);
     	
     	Label optionalQuizTitle = new Label("Enter your optional quiz grades.");
     	optionalQuizTitle.setPadding(new Insets(10, 10, 10, 10));
@@ -215,8 +245,6 @@ public class GradeCalculatorController {
     	
     	// Clear all error messages
     	projectErrorLabel.setText("");
-    	
-    	
     	
     	Grade projectGrade = new Grade(0, 100, 0.5);
     	projectErrorLabel.setText(projectGrade.setValue(projectGradeTextfield.getText()));
