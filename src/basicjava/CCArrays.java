@@ -5,22 +5,27 @@ import java.util.Arrays;
 
 public class CCArrays {
 	
-	public static void replace(char[] charArray, char toReplace, char replaceWith) {
+	
+	public static void replace(char[] charArray, char toReplace, char replaceWith) {	
 		
-		for (char i : charArray) {
+		// Get index when iterating through the array
+		int index = Arrays.asList(charArray).indexOf(charArray);
+		
+		for (char i : charArray) {	
 			
-			//char[] copy = charArray.clone();
-			
-			//bypass case sensitivity
-			//set default to all char being lower case
-			
-			if (Character.toLowerCase(i) == toReplace) {
-				Arrays.copyOfRange(charArray, replaceWith, toReplace);
+			// If character in array matches replacement character, then replace
+			if(i == toReplace) {
+				charArray[index] = replaceWith;
+			}
+				
+			// If character in array is lower-case, convert any possible upper-case replacement character to lower-case
+			if (i == Character.toLowerCase(toReplace) || i == Character.toUpperCase(toReplace)) {
+				charArray[index] = replaceWith;
 			}
 			
-		
-		}
-			
+			index++;
+	
+		}			
 	
 	}
 	
