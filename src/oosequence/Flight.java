@@ -38,8 +38,19 @@ public class Flight {
 	}
 
 
-	public long length() {		
-		return 0;
+	public long length() {	
+		
+		// If departure or arrival times are null, set length to zero as default
+		if(departure == null || arrival == null) {
+			return 0;
+		} else {
+			
+			// Divide by 60000 to convert from milliseconds to minutes
+			long flightDuration = (arrival.getTime() - departure.getTime()) / 60000;
+			return flightDuration;
+			
+		}
+		
 	}
 
 
