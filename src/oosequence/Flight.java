@@ -30,6 +30,10 @@ public class Flight {
 
 
 	public Flight(Flight copy){
+		
+		// No validation needed and make direct copy to departure and arrival times
+		departure = copy.departure;
+		arrival = copy.arrival;
 
 	}
 
