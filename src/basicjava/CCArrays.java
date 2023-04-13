@@ -1,7 +1,8 @@
 package basicjava;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class CCArrays {
 	
@@ -24,13 +25,17 @@ public class CCArrays {
 			}
 			
 			index++;
-	
 		}			
-	
 	}
 	
 	public static void sortAlphabetic(String[] strArray) {
 		
+		// Covert the string array to a list with Arrays method
+		List<String> stringList = Arrays.asList(strArray);
+		
+		// Use Collections method to sort the strings without being case sensitive
+		Collections.sort(stringList, String.CASE_INSENSITIVE_ORDER);
+
 	}
 
 }
