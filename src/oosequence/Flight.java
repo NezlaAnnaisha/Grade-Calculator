@@ -67,7 +67,14 @@ public class Flight extends TripComponent {
 	}
 
 	public String getDuration() {
-		return "";
+		
+		// Call method from parent class TripComponent (and convert)
+
+		TripComponent f = new TripComponent();
+
+		long flightDuration = (f.lengthInSeconds() / 60) + 10;		
+
+		return flightDuration + " minutes";
 	}
 
 
