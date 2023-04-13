@@ -54,6 +54,30 @@ public class Flight {
 	}
 
 
+	public Object getDeparture() {
+		
+		return departure;
+	}
+
+
+	public Object getArrival() {
+		
+		return arrival;
+	}
+
+
+	public void setDeparture(Date date) {
+		
+		
+	}
+
+
+	public void setArrival(Date date) {
+		
+		
+	}
+
+
 
 
 
