@@ -5,15 +5,15 @@ import java.util.Collections;
 import java.util.Date;
 
 public class Itinerary {
-	private ArrayList<Flight> flights;
+	private ArrayList<TripComponent> flights;
 	private String name;
 	
 	public Itinerary (String flightName) {
 		name = flightName;
-		flights = new ArrayList<Flight>();
+		flights = new ArrayList<TripComponent>();
 	}
 	
-	public void addFlight(Flight flightsAdded) {
+	public void addFlight(TripComponent flightsAdded) {
 		
 		
 		// Assume max list is 10, add all flights first before modifying
@@ -27,10 +27,10 @@ public class Itinerary {
 			// Loop to get second flight
 			for (int f2 = f1+1 ; f2 < flights.size() ; f2++) {
 					
-				Date firstFlightA = flights.get(f1).getArrival();
-				Date firstFlightD = flights.get(f1).getDeparture();
-				Date secondFlightA = flights.get(f2).getArrival();
-				Date secondFlightD = flights.get(f2).getDeparture();					
+				Date firstFlightA = flights.get(f1).getEnd();
+				Date firstFlightD = flights.get(f1).getStart();
+				Date secondFlightA = flights.get(f2).getEnd();
+				Date secondFlightD = flights.get(f2).getStart();					
 				
 								
 				// Check for the overlapping flight when more than 6 is entered		
@@ -54,8 +54,8 @@ public class Itinerary {
 		// Loop through each flight in array
 		for (int i = 0 ; i < flights.size()-1 ; i++) {			
 				
-				Date arrival = flights.get(i).getArrival();
-				Date departure = flights.get(i+1).getDeparture();					
+				Date arrival = flights.get(i).getEnd();
+				Date departure = flights.get(i+1).getStart();					
 					
 				//lay-over should be time between first flight's arrival waiting for second flight's departure
 				long layoverTime = (departure.getTime() - arrival.getTime()) / 60000;
@@ -66,7 +66,7 @@ public class Itinerary {
 		return layoverTotal;
 	}
 
-	public ArrayList<Flight> getFlights() {
+	public ArrayList<TripComponent> getFlights() {
 		return flights;
 	}
 
