@@ -1,6 +1,8 @@
 # Description
 Grade Calculator project from CPSC217 of Winter 2023.
 
+**Project is under the folder "application". This used to be a repository for other assignments, where Grade Calculator was one of them.
+
 ## Assignment Overwiew
 There are a total of 5 CC (coding challenges; or assignments) for the project. The due dates are as followed:
 
